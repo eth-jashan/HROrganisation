@@ -30,7 +30,7 @@ export const login=(email,password)=>{
     }
 }
 
-export const signup=( DepId, CompId, name, number, email,age,password)=>{
+export const signup=( DepId, CompId, name, number, email,age,password,role,joineddate)=>{
     return async(dispatch, getState)=>{
         const response1=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyD5F91cUBTP4erSBrU4ZDz5HMRcP_ONY68',{
             method:'POST',
@@ -54,7 +54,10 @@ export const signup=( DepId, CompId, name, number, email,age,password)=>{
                 Name:name,
                 Number:number,
                 Age:age,
-                email:email
+                email:email,
+                Role:role,
+                Teamleader:false,
+                joinedDate:joineddate
             })
         })
         const resData2=await response2.json();
@@ -65,7 +68,10 @@ export const signup=( DepId, CompId, name, number, email,age,password)=>{
             Name:name,
             Number:number,
             Age:age,
-            email:email
+            email:email,
+            Role:role,
+            teamleader:false,
+            joinedDate:joineddate
         }})
 
     }

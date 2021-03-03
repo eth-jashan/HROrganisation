@@ -23,8 +23,11 @@ export default authHandler=(state=initialState,action)=>{
                 action.detailslist.compid,
                 action.detailslist.Name,
                 action.detailslist.number,
+                action.detailslist.email,
                 action.detailslist.Age,
-                action.detailslist.email
+                action.detailslist.Role,
+                action.detailslist.teamleader,
+                action.detailslist.joinedDate
             )
             return{
                 ...state,
