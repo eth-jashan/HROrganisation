@@ -1,4 +1,4 @@
-import { FETCH_COMP } from "../action/Complist"
+import { FETCH_COMP } from "../action/registrationlist"
 
 const initialState={
     companylist:[]

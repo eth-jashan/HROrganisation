@@ -8,7 +8,7 @@ import ReduxThunk from 'redux-thunk'
 import * as Font from 'expo-font'
 import AppLoading from "expo-app-loading"
 
-import authHandler from './store/reducer/authreducer'
+import authHandler from './store/reducer/profile'
 
 const fontLoading = () =>{ 
   return Font.loadAsync({
