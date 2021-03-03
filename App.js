@@ -1,21 +1,48 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React,{useState} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import Navigator from './navigator/Navigator'
+import {Provider} from 'react-redux'
+import {applyMiddleware, createStore, combineReducers} from 'redux'
+import ReduxThunk from 'redux-thunk'
+import * as Font from 'expo-font'
+import AppLoading from "expo-app-loading"
+
+import authHandler from './store/reducer/authreducer'
+
+const fontLoading = () =>{ 
+  return Font.loadAsync({
+    'black':require('./assets/fonts/AirbnbCereal-Black.ttf'),
+    'bold':require('./assets/fonts/AirbnbCereal-Bold.ttf'),
+    'book':require('./assets/fonts/AirbnbCereal-Book.ttf'),
+    'extraBold':require('./assets/fonts/AirbnbCereal-ExtraBold.ttf'),
+    'light':require('./assets/fonts/AirbnbCereal-Light.ttf'),
+    'medium':require('./assets/fonts/AirbnbCereal-Medium.ttf'),
+    'logo': require('./assets/fonts/Cocon-Regular-Font.otf')
+})}
+
+const reducers=combineReducers({
+  auth:authHandler
+})
+
+const store=createStore(reducers,applyMiddleware(ReduxThunk))
 
 export default function App() {
+  const[fontLoad, setFontLoad] = useState(false)
+
+  if(!fontLoad)
+      {
+        return <AppLoading
+        startAsync ={fontLoading}
+        onFinish = {() => setFontLoad(true)}
+        onError = {(test)=> console.log(test) }
+        /> 
+      }
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Provider store={store} >
+      <Navigator/>
+    </Provider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
