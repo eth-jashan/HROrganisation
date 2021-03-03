@@ -1,8 +1,7 @@
-import { FETCH_COMP, FETCH_DEPARTMENT } from "../action/registrationlist"
+import { FETCH_COMP } from "../action/registrationlist"
 
 const initialState={
-    companylist:[],
-    departmentList:[]
+    companylist:[]
 }
 
 export default companyHandler=(state=initialState,action)=>{
@@ -11,17 +10,6 @@ export default companyHandler=(state=initialState,action)=>{
             return{
                 companylist:action.list
             }
-        
-        case FETCH_DEPARTMENT:{
-            const depList = action.list
-                return{
-                    ...state,
-                    departmentList:depList
-            }
-        }
 
-        default:
-            return state
     }
 }
-

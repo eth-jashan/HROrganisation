@@ -8,8 +8,12 @@ import ReduxThunk from 'redux-thunk'
 import * as Font from 'expo-font'
 import AppLoading from "expo-app-loading"
 
-import authHandler from './store/reducer/auth'
+
+import authReducer from './store/reducer/profile'
 import listReducer from './store/reducer/registrationlist'
+
+
+
 
 const fontLoading = () =>{ 
   return Font.loadAsync({
@@ -23,7 +27,7 @@ const fontLoading = () =>{
 })}
 
 const reducers=combineReducers({
-  auth:authHandler,
+  auth:authReducer,
   list:listReducer
 })
 
