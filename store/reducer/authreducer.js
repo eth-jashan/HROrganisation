@@ -1,4 +1,4 @@
-import { LOGIN } from "../action/auth"
+import { LOGIN, LOG_OUT } from "../action/auth"
 
 const initialState={
     token:null,
@@ -12,6 +12,10 @@ export default authHandler=(state=initialState,action)=>{
                 ...state,
                 token:action.token,
                 userid:action.userid
+            }
+        case LOG_OUT:
+            return{
+                initialState
             }
         default:return state;
     }

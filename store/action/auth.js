@@ -1,5 +1,5 @@
 export const LOGIN='Login'
-
+export const LOG_OUT='Log-out'
 export const login=(email,password)=>{
     return async(dispatch)=>{
         const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD5F91cUBTP4erSBrU4ZDz5HMRcP_ONY68',{
@@ -27,4 +27,7 @@ export const login=(email,password)=>{
         console.log(resData)
         dispatch({type : LOGIN_ACCOUNT, token : resData.idToken, userId : resData.localId })
     }
+}
+export const logout=()=>{
+    return{type:LOG_OUT}
 }
