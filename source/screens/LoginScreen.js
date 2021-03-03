@@ -1,16 +1,44 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect, useCallback} from 'react'
 import {View,Text,StyleSheet, Button, Dimensions,Alert} from 'react-native'
 import {login} from '../../store/action/auth'
 import { TextInput } from 'react-native-paper';
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import * as listAction from '../../store/action/registrationlist'
 
 const LoginScreen= props =>{
+
     const[email,setemail]=useState('')
     const[error,seterror]=useState()
     const[password,setpassword]=useState('')
     const dispatch=useDispatch()
+
+    const fetchOperation = useCallback( async() => {
+
+        await dispatch(listAction.fetchdetails())
+        // await dispatch(listAction.fetchDepartment())
+    
+    },[dispatch])
+    
+    useEffect(()=>{
+    
+        const willFocusListener = props.navigation.addListener('didFocus',fetchOperation)
+        return()=>{
+            willFocusListener.remove();
+        };
+    
+      },[fetchOperation]);
+    
+    
+      useEffect(()=>{
+    
+        fetchOperation()
+        
+      },[fetchOperation, dispatch])
+
+    console.log("List :", useSelector(x=>x.list.companylist))
+     
     
     useEffect(()=>{
         if(error){
@@ -63,7 +91,7 @@ const LoginScreen= props =>{
             </View>
             <View style={{width:Dimensions.get('window').width, alignItems:'center'}}>
                 
-                <TouchableOpacity style={{width:Dimensions.get('window').width*0.8, borderRadius:8,margin:10}} onPress={authHandler}>
+                <TouchableOpacity style={{width:Dimensions.get('window').width*0.8, borderRadius:8,margin:10}} onPress={fetchOperation}>
                 <View style={{backgroundColor:'#ea80fc', width:'100%', padding:10,  borderRadius:8}}>
                     <Text style={{fontFamily:'book', fontSize:20, color:'white', alignSelf:'center'}}>Login</Text>
                 </View>

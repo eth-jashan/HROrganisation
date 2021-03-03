@@ -1,5 +1,5 @@
 class OrganisationModel {
-    constructor(id, name, locality, city, email, companyURL, state, listId){
+    constructor(id, name, locality, city, email, companyURL, state, listId, uid){
         this.id = id;
         this.name = name;
         this.locality = locality;
@@ -7,7 +7,8 @@ class OrganisationModel {
         this.email = email;
         this.companyURL= companyURL;
         this.state = state;
-        this.listId = listId
+        this.listId = listId;
+        this.uid = uid
     }
 }
 export default OrganisationModel
