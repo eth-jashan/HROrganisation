@@ -1,6 +1,9 @@
+import EmployerModel from "../../model/EmployerModel"
+
 export const LOGIN='Login'
 export const LOG_OUT='Log-out'
 export const CREATE_ACCOUNT='Sign-Up'
+export const FETCH_PROFILE='Fetch_Profile'
 export const login=(email,password)=>{
     return async(dispatch)=>{
         const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD5F91cUBTP4erSBrU4ZDz5HMRcP_ONY68',{
@@ -66,7 +69,7 @@ export const signup=( DepId, CompId, name, number, email,age,password,role,joine
             depid:DepId,
             compid:CompId,
             Name:name,
-            Number:number,
+            number:number,
             Age:age,
             email:email,
             Role:role,
@@ -74,6 +77,22 @@ export const signup=( DepId, CompId, name, number, email,age,password,role,joine
             joinedDate:joineddate
         }})
 
+    }
+}
+
+export const fetchProfile=()=>{
+    return async (dispatch,getState)=>{
+        const uid=getState().auth.userid;
+        const token=getState().auth.token;
+        const response=await fetch(`https://customerapp-2cd9c.firebaseio.com/${uid}/employer.json?`)
+        const resData=await response.json()
+        let profile=[]
+        for(const key in resData){
+            profile.push(new EmployerModel(key,resData[key].depid,resData[key].compid
+                ,resData[key].Name,resData[key].number,resData[key].email,resData[key].Age,
+                resData[key].Role,resData[key].teamleader,resData[key].joinedDate))
+        }
+        dispatch({type:FETCH_PROFILE,profilelist:profile,userId:uid,Token:token})
     }
 }
 

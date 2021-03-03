@@ -1,5 +1,5 @@
 import EmployerModel from "../../model/EmployerModel"
-import { LOGIN, LOG_OUT, CREATE_ACCOUNT } from "../action/profile"
+import { LOGIN, LOG_OUT, CREATE_ACCOUNT, FETCH_PROFILE } from "../action/profile"
 
 const initialState={
     detailList:[],
@@ -41,6 +41,15 @@ export default authHandler=(state=initialState,action)=>{
                 detailList:[...state.detailList],
                 token:null,
                 userid:null
+            }
+        case FETCH_PROFILE:
+            {
+                return{
+                    ...state,
+                    detailList:action.profilelist,
+                    token:action.Token,
+                    userid:action.userId
+                }
             }
         default:return state;
     }
