@@ -3,21 +3,53 @@ import { TextInput} from 'react-native-paper'
 import {View,Text,StyleSheet, Dimensions} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from 'react-native-elements';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { Button, Input } from 'react-native-elements';
+import SearchInput, { createFilter } from 'react-native-search-filter';
+import {SearchBar} from 'react-native-elements'
+import { FlatList, ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
 
 
 const SignupScreen = props => {
 
+    const keys = ['name','state']
+    const [emailSlug, setEmailSlug] = useState('')
     const [name, setName] = useState('')
-    const [locality, setLocality] = useState('')
-    const [city, setCity] = useState('')
-    const [state, setState] = useState('')
-    const [mail, setMail] = useState('')
-    const [password, setPassword] = useState('')
-    const [reEnterPassword, setPassword2] = useState('')
-    const [url, setUrl] = useState('')
+    const [age, setAge] = useState('')
+    const [post, setPost] = useState('')
+    const [date, setDate] = useState('')
+    const [companyId, setCompanyId] = useState('')
+    const [company, setCompany]=useState('')
+    const [dept, setDept] = useState('')
+    const [depId, setDepId] = useState('')
+    const [mail, setMail] = useState(name +`@${emailSlug}`)
+    const companyList = useSelector(x=>x.list.companylist)
+    const [idList, setIdList]=useState([])
+
+    const continousSearch = (text) => {
+        let list = []
+        setCompany(text)
+        list = companyList.filter(x=>x.name.toLowerCase().includes(text.toLowerCase()))
+        setIdList(list)
+        console.log('Lower',idList)
+        
+    }
+    const companyUID = (id) =>{
+        setCompanyId(id)
+        setCompany('')
+    }
+
+    const continousSearch2 = (text) => {
+        let list = []
+        setDept(text)
+        list = companyList.filter(x=>x.name.toLowerCase().includes(text.toLowerCase()))
+        setIdList(list)
+        console.log('Lower',idList)
+        
+    }
+    
+    
+    
 
     const dispatch = useDispatch()
 
@@ -47,7 +79,7 @@ const SignupScreen = props => {
                     value = {name}
                     onChangeText = {(text)=>setName(text)}
                     mode = 'outlined'
-                    label = 'Name of Organisation'
+                    label = 'Name of Employer'
                     theme ={{colors:{primary:'#ea80fc',underlineColor:'transparent'}}}
                     style={{ fontFamily: 'medium', fontColor: 'white', height: 60, width: Dimensions.get('screen').width*0.97, backgroundColor:'#606368', alignSelf:'center' }}
                 />
@@ -55,18 +87,18 @@ const SignupScreen = props => {
         
             <View style={{width:Dimensions.get('window').width, flexDirection:'row', justifyContent:'space-between',paddingHorizontal:5}}>
                 <TextInput
-                    value = {locality}
-                    onChangeText = {(text)=>setLocality(text)}
+                    value = {age}
+                    onChangeText = {(text)=>setAge(text)}
                     mode = 'outlined'
-                    label = 'Locality'
+                    label = 'Age'
                     theme ={{colors:{primary:'#ea80fc',underlineColor:'transparent'}}}
                     style={{ fontFamily: 'medium', fontColor: 'white', height: 60, width: Dimensions.get('screen').width*0.475, backgroundColor:'#606368', alignSelf:'center' }}
                 />
                 <TextInput
-                    value = {city}
-                    onChangeText = {(text)=>setCity(text)}
+                    value = {date}
+                    onChangeText = {(text)=>setDate(text)}
                     mode = 'outlined'
-                    label = 'City'
+                    label = 'Joining Date'
                     theme ={{colors:{primary:'#ea80fc',underlineColor:'transparent'}}}
                     style={{ fontFamily: 'medium', fontColor: 'white', height: 60, width: Dimensions.get('screen').width*0.475, backgroundColor:'#606368', alignSelf:'center' }}
                 />
@@ -74,8 +106,8 @@ const SignupScreen = props => {
 
             <View style={{width:Dimensions.get('window').width}}>
                 <TextInput
-                    value = {state}
-                    onChangeText = {(text)=>setState(text)}
+                    value = {post}
+                    onChangeText = {(text)=>setPost(text)}
                     mode = 'outlined'
                     label = 'State'
                     theme ={{colors:{primary:'#ea80fc',underlineColor:'transparent'}}}
@@ -83,18 +115,59 @@ const SignupScreen = props => {
                 />
             </View>
 
+            
+
             <View style={{width:Dimensions.get('window').width}}>
-                <TextInput
-                    value = {mail}
-                    onChangeText = {(text)=>setMail(text)}
-                    mode = 'outlined'
-                    label = 'Company Mail'
-                    theme ={{colors:{primary:'#ea80fc',underlineColor:'transparent'}}}
-                    style={{ fontFamily: 'medium', fontColor: 'white', height: 60, width: Dimensions.get('screen').width*0.97, backgroundColor:'#606368', alignSelf:'center' }}
+            <TextInput
+                value={companyId}
+                onChangeText = {(text)=>continousSearch(text)}
+                mode = 'outlined'
+                label = 'Company ID'
+                theme ={{colors:{primary:'#ea80fc',underlineColor:'transparent'}}}
+                style={{ fontFamily: 'medium', fontColor: 'white', height: 60, width: Dimensions.get('screen').width*0.97, backgroundColor:'#606368', alignSelf:'center' }}
+            />
+            <FlatList
+                    data={company === ''?[]: idList}
+                    keyExtractor={x=>x.id}
+                    renderItem={({item})=>{
+                        return(
+                            <View style={{width:Dimensions.get('window').width*0.85,alignSelf:'center',padding:5, borderWidth:0.5, borderColor:'white'}}>
+                                <TouchableOpacity onPress={()=>{companyUID(item.id)}}>
+                                <Text style={{fontFamily:'medium', fontSize:16, color:'white', alignSelf:'center'}}>{item.name}</Text>
+                                </TouchableOpacity>
+                            </View>
+                        )
+                    }}
                 />
             </View>
 
-            <View style={{width:Dimensions.get('window').width, flexDirection:'row', justifyContent:'space-between',paddingHorizontal:5}}>
+            <View style={{width:Dimensions.get('window').width}}>
+            <TextInput
+                value={depId}
+                onChangeText = {(text)=>continousSearch2(text)}
+                mode = 'outlined'
+                label = 'Company ID'
+                theme ={{colors:{primary:'#ea80fc',underlineColor:'transparent'}}}
+                style={{ fontFamily: 'medium', fontColor: 'white', height: 60, width: Dimensions.get('screen').width*0.97, backgroundColor:'#606368', alignSelf:'center' }}
+            />
+            <FlatList
+                    data={company === ''?[]: idList}
+                    keyExtractor={x=>x.id}
+                    renderItem={({item})=>{
+                        return(
+                            <View style={{width:Dimensions.get('window').width*0.85,alignSelf:'center',padding:5, borderWidth:0.5, borderColor:'white'}}>
+                                <TouchableOpacity onPress={()=>{companyUID(item.id)}}>
+                                <Text style={{fontFamily:'medium', fontSize:16, color:'white', alignSelf:'center'}}>{item.name}</Text>
+                                </TouchableOpacity>
+                            </View>
+                        )
+                    }}
+                />
+            </View>
+
+            
+
+            {/* <View style={{width:Dimensions.get('window').width, flexDirection:'row', justifyContent:'space-between',paddingHorizontal:5}}>
                 <TextInput
                     value = {password}
                     onChangeText = {(text)=>setPassword(text)}
@@ -111,18 +184,8 @@ const SignupScreen = props => {
                     theme ={{colors:{primary:'#ea80fc',underlineColor:'transparent'}}}
                     style={{ fontFamily: 'medium', fontColor: 'white', height: 60, width: Dimensions.get('screen').width*0.475, backgroundColor:'#606368', alignSelf:'center' }}
                 />
-            </View>
+            </View> */}
 
-            <View style={{width:Dimensions.get('window').width}}>
-                <TextInput
-                    value = {url}
-                    onChangeText = {(text)=>setUrl(text)}
-                    mode = 'outlined'
-                    label = 'Website URL'
-                    theme ={{colors:{primary:'#ea80fc',underlineColor:'transparent'}}}
-                    style={{ fontFamily: 'medium', fontColor: 'white', height: 60, width: Dimensions.get('screen').width*0.97, backgroundColor:'#606368', alignSelf:'center' }}
-                />
-            </View>
 
             <View style={{width:Dimensions.get('window').width, alignItems:'center'}}>
                 
@@ -142,7 +205,14 @@ const SignupScreen = props => {
     );
 };
 
-const styles = StyleSheet.create({});
+const Style = StyleSheet.create({
+    inputStyle:{
+        color:'gray'
+    },
+    iconStyle:{
+        color:'#47b880'
+    }
+})
 
 
 SignupScreen.navigationOptions=(navData)=>{

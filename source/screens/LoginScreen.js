@@ -1,6 +1,5 @@
 import React,{useState,useEffect, useCallback} from 'react'
 import {View,Text,StyleSheet, Button, Dimensions,Alert} from 'react-native'
-import {login} from '../../store/action/auth'
 import { TextInput } from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux'
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -25,7 +24,9 @@ const LoginScreen= props =>{
     
         const willFocusListener = props.navigation.addListener('didFocus',fetchOperation)
         return()=>{
+
             willFocusListener.remove();
+
         };
     
       },[fetchOperation]);
@@ -98,6 +99,10 @@ const LoginScreen= props =>{
                 </TouchableOpacity>
 
             </View>
+
+            <TouchableOpacity onPress={()=>props.navigation.navigate('Signup')}>
+            <Text style={{fontFamily:'medium', fontSize:18, color:'white', alignSelf:'center', margin:5}}>New Organisation? Signup First</Text>
+            </TouchableOpacity>
             </View>
         
         

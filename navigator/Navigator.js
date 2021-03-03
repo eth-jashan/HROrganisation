@@ -7,6 +7,7 @@ import HomeScreen from '../source/screens/HomeScreen';
 import ProfileScreen from '../source/screens/ProfileScreen';
 import ChatRoom from '../source/screens/ChatRoom';
 import { Ionicons } from '@expo/vector-icons';
+import SignupScreen from '../source/screens/SignupScreen';
 const defaultNavOptions = {
     headerStyle:{
         backgroundColor:'#121212'
@@ -15,7 +16,8 @@ const defaultNavOptions = {
 }
 
 const LoginNavigator=createStackNavigator({
-    Login:LoginScreen
+    Login:LoginScreen,
+    Signup:SignupScreen
 },{ defaultNavigationOptions: defaultNavOptions})
 const HomeNavigator=createStackNavigator({
     Home:HomeScreen

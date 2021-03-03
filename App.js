@@ -17,6 +17,7 @@ import listReducer from './store/reducer/registrationlist'
 
 const fontLoading = () =>{ 
   return Font.loadAsync({
+
     'black':require('./assets/fonts/AirbnbCereal-Black.ttf'),
     'bold':require('./assets/fonts/AirbnbCereal-Bold.ttf'),
     'book':require('./assets/fonts/AirbnbCereal-Book.ttf'),
@@ -24,7 +25,8 @@ const fontLoading = () =>{
     'light':require('./assets/fonts/AirbnbCereal-Light.ttf'),
     'medium':require('./assets/fonts/AirbnbCereal-Medium.ttf'),
     'logo': require('./assets/fonts/Cocon-Regular-Font.otf')
-})}
+                    
+  })}
 
 const reducers=combineReducers({
   auth:authReducer,

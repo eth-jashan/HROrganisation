@@ -10,6 +10,9 @@ export default companyHandler=(state=initialState,action)=>{
             return{
                 companylist:action.list
             }
+        
+        default:
+            return state
 
     }
 }
