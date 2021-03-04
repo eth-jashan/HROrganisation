@@ -82,7 +82,7 @@ const SignupScreen = props => {
         <SafeAreaView>
         <ScrollView>
         <View style={{height:Dimensions.get('window').height, width:Dimensions.get('window').width, backgroundColor:'#121212',justifyContent:'center'}}>
-        <Text style={{fontSize:35, fontFamily:'medium', color:'white', alignSelf:'center', margin:10}}>Register Your Company</Text>
+        <Text style={{fontSize:35, fontFamily:'medium', color:'white', alignSelf:'center', margin:10}}>Register YourSelf</Text>
         <View style={{alignSelf:'center'}}>    
             
             <View style={{width:Dimensions.get('window').width, paddingHorizontal:5}}>

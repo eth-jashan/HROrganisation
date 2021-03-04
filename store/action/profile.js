@@ -4,6 +4,7 @@ export const LOGIN='Login'
 export const LOG_OUT='Log-out'
 export const CREATE_ACCOUNT='Sign-Up'
 export const FETCH_PROFILE='Fetch_Profile'
+export const UPDATE_PROFILE='Update_Profile'
 export const login=(email,password)=>{
     return async(dispatch)=>{
         const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD5F91cUBTP4erSBrU4ZDz5HMRcP_ONY68',{
@@ -80,6 +81,36 @@ export const signup=( DepId, CompId, name, number, email,age,password,role,joine
         }})
 
     }
+}
+
+export const updateProfile=( id,DepId, CompId, name, number, email,age,role,teamleader,joineddate)=>{
+    return async (dispatch,getState)=>{
+        const token=getState().login.token;
+        const userid=getState().login.userId;
+        await fetch(`https://shop-app-8547a-default-rtdb.firebaseio.com/${CompId}/employee/${id}.json?auth=${token}`,
+        {
+            method:'PATCH',
+            headers:{
+                'Content-Type':'application/json',
+            },
+            body:JSON.stringify({
+                DepId:DepId,
+                CompId:CompId,
+                Name:name,
+                Number:number,
+                Age:age,
+                email:email,
+                Role:role,
+                Teamleader:teamleader,
+                joinedDate:joineddate
+            })
+
+        }
+
+        )
+        dispatch({type:UPDATE_PROFILE,updatedata:{id,DepId, CompId, name, number, email,age,role,teamleader,joineddate}})
+    }
+
 }
 
 export const fetchProfile=()=>{
