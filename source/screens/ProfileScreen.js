@@ -13,15 +13,15 @@ const ProfileScreen=props=>{
         await dispatch(fetchProfile())
     }
     
-    const [name,setname]=useState(hrdetails.name)
-    const [number,setnumber]=useState(hrdetails.number)
-    const [age,setage]=useState(hrdetails.age)
-    const [role,setrole]=useState(hrdetails.role)
-    const [joindate,setjoindate]=useState(hrdetails.joineddate)
+    const [name,setname]=useState(hrdetails[0].name)
+    const [number,setnumber]=useState(hrdetails[0].number)
+    const [age,setage]=useState(hrdetails[0].age)
+    const [role,setrole]=useState(hrdetails[0].role)
+    const [joindate,setjoindate]=useState(hrdetails[0].joineddate)
     const dispatch=useDispatch()
     const updateHandler=async()=>{
-        await dispatch(updateProfile(hrdetails.id,hrdetails.DepId,hrdetails.compId,
-            name,number,hrdetails.email,age,role,hrdetails.role,joindate))
+        await dispatch(updateProfile(hrdetails[0].id,hrdetails[0].DepId,hrdetails[0].compId,
+            name,number,hrdetails[0].email,age,role,hrdetails[0].role,joindate))
     }
     useEffect(()=>{
         const willFocusListener = props.navigation.addListener('didFocus',fetchOperation)
@@ -99,7 +99,7 @@ const ProfileScreen=props=>{
             </View>
             <View style={{width:Dimensions.get('window').width, paddingHorizontal:5}} >
             <TextInput
-                    value = {hrdetails.email}
+                    value = {hrdetails[0].email}
                     disabled
                     mode = 'flat'
                     label = 'Email'

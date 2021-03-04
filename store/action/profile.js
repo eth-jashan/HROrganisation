@@ -91,9 +91,9 @@ export const signup=( DepId, CompId, name, number, email,age,password,role,joine
 
 export const updateProfile=( id,DepId, CompId, name, number, email,age,role,teamleader,joineddate)=>{
     return async (dispatch,getState)=>{
-        const token=getState().login.token;
-        const userid=getState().login.userid;
-        await fetch(`https://customerapp-2cd9c.firebaseio.com/${CompId}/employee/${id}.json?auth=${token}`,
+        
+        // const userid=getState().auth.userid;
+        await fetch(`https://customerapp-2cd9c.firebaseio.com/${CompId}/employee/${id}.json?`,
         {
             method:'PATCH',
             headers:{
