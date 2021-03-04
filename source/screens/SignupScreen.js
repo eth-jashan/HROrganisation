@@ -7,13 +7,13 @@ import { Button, Input } from 'react-native-elements';
 import SearchInput, { createFilter } from 'react-native-search-filter';
 import {SearchBar} from 'react-native-elements'
 import { FlatList, ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-
-
+import * as listAction from '../../store/action/registrationlist'
+import * as signupAction from '../../store/action/profile'
 
 const SignupScreen = props => {
 
-    const keys = ['name','state']
-    const [emailSlug, setEmailSlug] = useState('')
+   
+    const[number, setNumber]=useState('')
     const [name, setName] = useState('')
     const [age, setAge] = useState('')
     const [post, setPost] = useState('')
@@ -22,9 +22,15 @@ const SignupScreen = props => {
     const [company, setCompany]=useState('')
     const [dept, setDept] = useState('')
     const [depId, setDepId] = useState('')
-    const [mail, setMail] = useState(name +`@${emailSlug}`)
+    const [mail, setMail] = useState('')
+    const [password, setPassword] = useState('')
+    const [reEnterPassword, setPassword2] = useState('')
     const companyList = useSelector(x=>x.list.companylist)
+    const departmentList = useSelector(x=>x.list.departmentList)
     const [idList, setIdList]=useState([])
+    const [deptList, setDeptList]=useState([])
+
+    
 
     const continousSearch = (text) => {
         let list = []
@@ -34,18 +40,24 @@ const SignupScreen = props => {
         console.log('Lower',idList)
         
     }
-    const companyUID = (id) =>{
+    const companyUID = async(id) =>{
         setCompanyId(id)
+        await dispatch(listAction.fetchdepartment(id))
         setCompany('')
+        console.log("List:",departmentList)
     }
 
     const continousSearch2 = (text) => {
         let list = []
         setDept(text)
-        list = companyList.filter(x=>x.name.toLowerCase().includes(text.toLowerCase()))
-        setIdList(list)
-        console.log('Lower',idList)
-        
+        list = departmentList.filter(x=>x.name.includes(text))
+        setDeptList(list)
+        console.log('Lower',list) 
+    }
+    const DeptId = (id, emailSlug) =>{
+        setDepId(id)
+        setDept('')
+        setMail(`${name.toLowerCase()}.${emailSlug}`)
     }
     
     
@@ -56,10 +68,9 @@ const SignupScreen = props => {
     const signUpHandler = async() => {
 
         if(reEnterPassword === password){
-            
-            await dispatch(signupAction.signup(mail, password, locality, state, city,name,url))
-            await dispatch(profileAction.addAccount(name, locality, state, city, url, mail))
-            props.navigation.navigate('Login')
+        
+            await dispatch(signupAction.signup(depId, companyId, name, number, mail, age, password, post, date))
+            props.navigation.navigate('Home')
         }else{
             alert("Password Don't Match !")
         }
@@ -80,6 +91,17 @@ const SignupScreen = props => {
                     onChangeText = {(text)=>setName(text)}
                     mode = 'outlined'
                     label = 'Name of Employer'
+                    theme ={{colors:{primary:'#ea80fc',underlineColor:'transparent'}}}
+                    style={{ fontFamily: 'medium', fontColor: 'white', height: 60, width: Dimensions.get('screen').width*0.97, backgroundColor:'#606368', alignSelf:'center' }}
+                />
+            </View>
+
+            <View style={{width:Dimensions.get('window').width, paddingHorizontal:5}}>
+                <TextInput
+                    value = {number}
+                    onChangeText = {(text)=>setNumber(text)}
+                    mode = 'outlined'
+                    label = 'Contact Number'
                     theme ={{colors:{primary:'#ea80fc',underlineColor:'transparent'}}}
                     style={{ fontFamily: 'medium', fontColor: 'white', height: 60, width: Dimensions.get('screen').width*0.97, backgroundColor:'#606368', alignSelf:'center' }}
                 />
@@ -109,7 +131,7 @@ const SignupScreen = props => {
                     value = {post}
                     onChangeText = {(text)=>setPost(text)}
                     mode = 'outlined'
-                    label = 'State'
+                    label = 'Job Post'
                     theme ={{colors:{primary:'#ea80fc',underlineColor:'transparent'}}}
                     style={{ fontFamily: 'medium', fontColor: 'white', height: 60, width: Dimensions.get('screen').width*0.97, backgroundColor:'#606368', alignSelf:'center' }}
                 />
@@ -132,7 +154,7 @@ const SignupScreen = props => {
                     renderItem={({item})=>{
                         return(
                             <View style={{width:Dimensions.get('window').width*0.85,alignSelf:'center',padding:5, borderWidth:0.5, borderColor:'white'}}>
-                                <TouchableOpacity onPress={()=>{companyUID(item.id)}}>
+                                <TouchableOpacity onPress={()=>{companyUID(item.uid)}}>
                                 <Text style={{fontFamily:'medium', fontSize:16, color:'white', alignSelf:'center'}}>{item.name}</Text>
                                 </TouchableOpacity>
                             </View>
@@ -146,17 +168,17 @@ const SignupScreen = props => {
                 value={depId}
                 onChangeText = {(text)=>continousSearch2(text)}
                 mode = 'outlined'
-                label = 'Company ID'
+                label = 'Dept ID'
                 theme ={{colors:{primary:'#ea80fc',underlineColor:'transparent'}}}
                 style={{ fontFamily: 'medium', fontColor: 'white', height: 60, width: Dimensions.get('screen').width*0.97, backgroundColor:'#606368', alignSelf:'center' }}
             />
             <FlatList
-                    data={company === ''?[]: idList}
+                    data={dept === ''?[]: deptList}
                     keyExtractor={x=>x.id}
                     renderItem={({item})=>{
                         return(
                             <View style={{width:Dimensions.get('window').width*0.85,alignSelf:'center',padding:5, borderWidth:0.5, borderColor:'white'}}>
-                                <TouchableOpacity onPress={()=>{companyUID(item.id)}}>
+                                <TouchableOpacity onPress={()=>{DeptId(item.id, item.emailSlug)}}>
                                 <Text style={{fontFamily:'medium', fontSize:16, color:'white', alignSelf:'center'}}>{item.name}</Text>
                                 </TouchableOpacity>
                             </View>
@@ -165,9 +187,20 @@ const SignupScreen = props => {
                 />
             </View>
 
+            <View style={{width:Dimensions.get('window').width}}>
+                <TextInput
+                    value = {mail}
+                    disabled
+                    mode = 'outlined'
+                    label = 'State'
+                    theme ={{colors:{primary:'#ea80fc',underlineColor:'transparent'}}}
+                    style={{ fontFamily: 'medium', fontColor: 'white', height: 60, width: Dimensions.get('screen').width*0.97, backgroundColor:'#606368', alignSelf:'center' }}
+                />
+            </View>
+
             
 
-            {/* <View style={{width:Dimensions.get('window').width, flexDirection:'row', justifyContent:'space-between',paddingHorizontal:5}}>
+            <View style={{width:Dimensions.get('window').width, flexDirection:'row', justifyContent:'space-between',paddingHorizontal:5}}>
                 <TextInput
                     value = {password}
                     onChangeText = {(text)=>setPassword(text)}
@@ -184,7 +217,7 @@ const SignupScreen = props => {
                     theme ={{colors:{primary:'#ea80fc',underlineColor:'transparent'}}}
                     style={{ fontFamily: 'medium', fontColor: 'white', height: 60, width: Dimensions.get('screen').width*0.475, backgroundColor:'#606368', alignSelf:'center' }}
                 />
-            </View> */}
+            </View>
 
 
             <View style={{width:Dimensions.get('window').width, alignItems:'center'}}>

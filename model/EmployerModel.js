@@ -3,7 +3,7 @@ class EmployerModel {
         
         this.id = id;
         this.DepId = DepId;
-        this.compId = comId;
+        this.compId = compId;
         this.name = name;
         this.number = number;
         this.email = email;
