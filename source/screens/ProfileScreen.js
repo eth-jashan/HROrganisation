@@ -17,7 +17,7 @@ const ProfileScreen=props=>{
     const dispatch=useDispatch()
     const updateHandler=async()=>{
         await dispatch(updateProfile(hrdetails.id,hrdetails.DepId,hrdetails.compId,
-            name,number,hrdetails.email,age,role,hrdetails.role,joineddate))
+            name,number,hrdetails.email,age,role,hrdetails.role,joindate))
     }
     return(
         <SafeAreaView style={styles.maincontainer} >
