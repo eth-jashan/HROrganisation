@@ -46,7 +46,7 @@ const ChatRoom=props=>{
                         placeholder="Message" mode="flat" onChangeText={text => setMessage1(text)}/>
                     </View>
                     <View>
-                    <TouchableOpacity onPress={CreateMsg.bind(senderName,message1} >
+                    <TouchableOpacity onPress={CreateMsg.bind(senderName,message1)} >
                       <View style={{backgroundColor:'#ea80fc', width:'100%', padding:9.5,  borderRadius:8}}>
                         <Text style={{fontFamily:'book', fontSize:20, color:'white', alignSelf:'center'}}>Send</Text>
                       </View>
