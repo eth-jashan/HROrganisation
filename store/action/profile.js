@@ -30,7 +30,7 @@ export const login=(email,password)=>{
         }
         const resData = await response.json();
         console.log(resData)
-        dispatch({type : LOGIN_ACCOUNT, token : resData.idToken, userId : resData.localId })
+        dispatch({type : LOGIN, token : resData.idToken, userId : resData.localId })
     }
 }
 

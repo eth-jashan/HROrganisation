@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import * as listAction from '../../store/action/registrationlist'
+import * as profileAction from '../../store/action/profile'
 
 const LoginScreen= props =>{
 
@@ -50,7 +51,7 @@ const LoginScreen= props =>{
     const authHandler=async()=>{
         seterror(null)
         try{
-            //await dispatch(login(email,password))
+            await dispatch(profileAction.login(email,password))
             props.navigation.navigate('Home')
         }
         catch(err){
@@ -92,7 +93,7 @@ const LoginScreen= props =>{
             </View>
             <View style={{width:Dimensions.get('window').width, alignItems:'center'}}>
                 
-                <TouchableOpacity style={{width:Dimensions.get('window').width*0.8, borderRadius:8,margin:10}} onPress={fetchOperation}>
+                <TouchableOpacity style={{width:Dimensions.get('window').width*0.8, borderRadius:8,margin:10}} onPress={authHandler}>
                 <View style={{backgroundColor:'#ea80fc', width:'100%', padding:10,  borderRadius:8}}>
                     <Text style={{fontFamily:'book', fontSize:20, color:'white', alignSelf:'center'}}>Login</Text>
                 </View>
