@@ -66,6 +66,12 @@ export const signup=( DepId, CompId, name, number, email,age,password,role,joine
         })
         const resData2=await response2.json();
         console.log("ID :", resData2)
+        await fetch(`https://customerapp-2cd9c.firebaseio.com/employee/${resData1.localId}.json?`,{
+            method:'POST',
+            headers : {'Content-Type':'application/json'},
+            body:JSON.stringify({compId:CompId})
+        })
+        
 
         dispatch({type:CREATE_ACCOUNT,token : resData1.idToken, userId : resData1.localId,detailslist:{
             id:resData2.name,
@@ -87,7 +93,7 @@ export const updateProfile=( id,DepId, CompId, name, number, email,age,role,team
     return async (dispatch,getState)=>{
         const token=getState().login.token;
         const userid=getState().login.userid;
-        await fetch(`https://shop-app-8547a-default-rtdb.firebaseio.com/${CompId}/employee/${id}.json?auth=${token}`,
+        await fetch(`https://customerapp-2cd9c.firebaseio.com/${CompId}/employee/${id}.json?auth=${token}`,
         {
             method:'PATCH',
             headers:{
@@ -117,15 +123,24 @@ export const fetchProfile=()=>{
     return async (dispatch,getState)=>{
         const uid=getState().auth.userid;
         const token=getState().auth.token;
-        const response=await fetch(`https://customerapp-2cd9c.firebaseio.com/${uid}/employer.json?`)
+
+        const response1 = await fetch(`https://customerapp-2cd9c.firebaseio.com/employee/${uid}.json?`)
+        const resData2 = await response1.json()
+        let companyId = []
+        for(const key in resData2){
+            companyId.push(resData2[key].compId)
+        }
+
+        const response=await fetch(`https://customerapp-2cd9c.firebaseio.com/${companyId[0]}/employee.json?`)
         const resData=await response.json()
         let profile=[]
         for(const key in resData){
-            profile.push(new EmployerModel(key,resData[key].depid,resData[key].compid
-                ,resData[key].Name,resData[key].number,resData[key].email,resData[key].Age,
-                resData[key].Role,resData[key].teamleader,resData[key].joinedDate))
+            profile.push(new EmployerModel(key,resData[key].DepId,resData[key].CompId
+                ,resData[key].Name,resData[key].Number,resData[key].email,resData[key].Age,
+                resData[key].Role,resData[key].teamleader,resData[key].joinedDate, resData[key].EmpId))
         }
-        dispatch({type:FETCH_PROFILE,profilelist:profile,userId:uid,Token:token})
+        console.log(profile.filter(x=>x.empId === uid), uid)
+        dispatch({type:FETCH_PROFILE,profilelist:profile.filter(x=>x.empId === uid),userId:uid,Token:token})
     }
 }
 

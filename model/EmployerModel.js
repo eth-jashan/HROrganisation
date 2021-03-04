@@ -1,5 +1,5 @@
 class EmployerModel {
-    constructor(id, DepId, compId, name, number, email,age,role,teamleader,joineddate){
+    constructor(id, DepId, compId, name, number, email,age,role,teamleader,joineddate, empId){
         
         this.id = id;
         this.DepId = DepId;
@@ -11,6 +11,7 @@ class EmployerModel {
         this.role=role
         this.teamleader=teamleader
         this.joineddate=joineddate
+        this.empId= empId
 }
 }
 export default EmployerModel
