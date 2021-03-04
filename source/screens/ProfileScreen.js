@@ -1,14 +1,18 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View,Text,Dimensions,StyleSheet } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { TextInput } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
-import {updateProfile} from '../../store/action/profile'
+import {updateProfile,fetchProfile} from '../../store/action/profile'
 
 const ProfileScreen=props=>{
     const hrdetails=useSelector(state=>state.profile.detailList)
+    const fetchOperation = async() => {
+        await dispatch(fetchProfile())
+    }
+    
     const [name,setname]=useState(hrdetails.name)
     const [number,setnumber]=useState(hrdetails.number)
     const [age,setage]=useState(hrdetails.age)
@@ -19,6 +23,16 @@ const ProfileScreen=props=>{
         await dispatch(updateProfile(hrdetails.id,hrdetails.DepId,hrdetails.compId,
             name,number,hrdetails.email,age,role,hrdetails.role,joindate))
     }
+    useEffect(()=>{
+        const willFocusListener = props.navigation.addListener('didFocus',fetchOperation)
+        return()=>{
+            willFocusListener.remove();
+        };
+      },[fetchOperation]);
+      useEffect(()=>{
+        fetchOperation()
+      },[fetchOperation, dispatch])
+   
     return(
         <SafeAreaView style={styles.maincontainer} >
            <View style={{width:Dimensions.get('window').width, alignSelf:'center'}} >

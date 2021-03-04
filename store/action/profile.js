@@ -86,7 +86,7 @@ export const signup=( DepId, CompId, name, number, email,age,password,role,joine
 export const updateProfile=( id,DepId, CompId, name, number, email,age,role,teamleader,joineddate)=>{
     return async (dispatch,getState)=>{
         const token=getState().login.token;
-        const userid=getState().login.userId;
+        const userid=getState().login.userid;
         await fetch(`https://shop-app-8547a-default-rtdb.firebaseio.com/${CompId}/employee/${id}.json?auth=${token}`,
         {
             method:'PATCH',
