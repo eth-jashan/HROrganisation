@@ -1,8 +1,8 @@
 
 class MessageModel {
-    constructor(id,comapanyid,DepId,senderName,message,date,senderId){
+    constructor(id,companyid,DepId,senderName,message,date,senderId){
         this.id=id
-        this.companyid = comapanyid;
+        this.companyid = companyid;
         this.DepId = DepId;
         this.senderName = senderName
         this.message = message;

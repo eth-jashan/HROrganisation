@@ -3,8 +3,11 @@ import { LOGIN, LOG_OUT, CREATE_ACCOUNT, FETCH_PROFILE, UPDATE_PROFILE } from ".
 
 const initialState={
     detailList:[],
+    depId:null,
+    compId:null,
     token:null,
-    userid:null
+    userid:null,
+    isLeader:false
 }
 
 export default authHandler=(state=initialState,action)=>{
@@ -31,9 +34,11 @@ export default authHandler=(state=initialState,action)=>{
             )
             return{
                 ...state,
-                detailList:EmployerDetail,
+                detailList:[...state].concat(EmployerDetail),
                 token:action.token,
-                userid:action.userId
+                userid:action.userId,
+                depId:action.detailList.depid,
+                compId:action.detailList.compid
             }
         // case UPDATE_PROFILE:
         //     const profileid=state.detailList.findIndex(pro=>pro.id===action.updatedata.id)
@@ -60,19 +65,17 @@ export default authHandler=(state=initialState,action)=>{
         //     }
             
         case LOG_OUT:
-            return{
-                ...state,
-                detailList:[...state.detailList],
-                token:null,
-                userid:null
-            }
+            return initialState
         case FETCH_PROFILE:
             {
                 return{
                     ...state,
                     detailList:action.profilelist,
                     token:action.Token,
-                    userid:action.userId
+                    userid:action.userId,
+                    depId:action.depId,
+                    compId:action.compId,
+                    isLeader:action.teamLeader
                 }
             }
         default:return state;

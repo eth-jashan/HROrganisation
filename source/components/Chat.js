@@ -2,12 +2,12 @@ import React from 'react';
 
 import {View,Text} from 'react-native';
 
-const Chat = () => {
+const Chat = (props) => {
     return(
         <View>
             <View style={{flexDirection:'row'}}>
-                <Text>{props.name}</Text>
-                <Text>{props.message}</Text>
+                <Text>{props.item.name}</Text>
+                <Text>{props.item.message}</Text>
             </View>
         </View>
     );

@@ -5,29 +5,30 @@ export const CREATE_MESSAGE = 'CREATE_MESSAGE'
 
 export const fetchMessage = (companyid,DepId) => {
     return async(dispatch,getState) => {
-        const response = await fetch(`https://customerapp-2cd9c.firebaseio.com/${comapanyid}/Chat/${DepId}.json`);
+        const response = await fetch(`https://customerapp-2cd9c.firebaseio.com/${companyid}/chat/${DepId}.json`);
         const resData=await response.json()
 
         let message = []
         for(const key in resData){
-            message.push(new MessageModel(resData[key].id,resData[key].comapanyid,
+            message.push(new MessageModel(resData[key].id,resData[key].companyid,
                 resData[key].DepId,resData[key].senderName,resData[key].message,resData[key].date,resData[key].senderID))
         }
+        console.log('message :',message)
         dispatch({type:FETCH_MESSAGE,message:message})
     }
 }
 
-export const createMessage = (comapanyid,DepId,senderName,message,date,senderId) => {
+export const createMessage = (companyid,DepId,senderName,message,date,senderId) => {
     return async(dispatch,getState) => {
         const token = getState().profile.token;
         const userId = getState().profile.userId;
 
-        const response = await fetch(`https://customerapp-2cd9c.firebaseio.com/${comapanyid}/Chat/${DepId}.json`,{
+        const response = await fetch(`https://customerapp-2cd9c.firebaseio.com/${companyid}/chat/${DepId}.json`,{
             method:'POST',
             header:{'Content-Type':'application/json'},
             body:JSON.stringify({
                 id:userId,
-                comapanyid,
+                companyid,
                 DepId,
                 senderName,
                 message,
@@ -36,12 +37,12 @@ export const createMessage = (comapanyid,DepId,senderName,message,date,senderId)
             })
         })
         const resData = await response.json();
-        console.log(resData)
+        
         dispatch({
             type:CREATE_MESSAGE,
             messageData: {
                 id:resData.name,
-                comapanyid:comapanyid,
+                companyid:companyid,
                 DepId:DepId,
                 senderName:senderName,
                 message:message,

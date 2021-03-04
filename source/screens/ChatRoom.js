@@ -1,60 +1,49 @@
 import React, { useEffect, useState } from 'react'
-import { Dimensions } from 'react-native'
-import { Button } from 'react-native'
-import {View,Text,StyleSheet,TouchableOpacity} from 'react-native'
-import { FlatList, ScrollView, TextInput } from 'react-native-gesture-handler'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import {Dimensions,View,Text,StyleSheet,TouchableOpacity} from 'react-native'
+import { FlatList, ScrollView } from 'react-native-gesture-handler'
 import { useDispatch, useSelector } from 'react-redux'
 import * as messageActions from '../../store/action/message';
 import Chat from '../components/Chat';
-
+import { TextInput} from 'react-native-paper'
+import { Button } from 'react-native'
 
 const ChatRoom=props=>{
     const dispatch = useDispatch();
 
     const message = useSelector(state=>state.message.message);
     const profile = useSelector(state=>state.profile.detailList);
+    const departmentId = useSelector(x=>x.profile.depId)
+    const companyId = useSelector(x=>x.profile.compId)
+    const userId = useSelector(x=>x.profile.userid)
 
-    const companyid = profile.compid;
-    const DepId = profile.depid;
-    const senderId = profile.id;
-    const senderName = profile.Name;
-
-    useEffect(()=>{
-        fetchOperation();
-    },[dispatch])
-
-    const fetchOperation = async(companyid,DepId) => {
-        await dispatch(messageActions.fetchMessage(companyid,DepId))
+    const CreateMsg = async() => {
+        // let date = new Date()
+        await dispatch(messageActions.createMessage(companyId,departmentId,profile[0].name,message1,userId))
+        await dispatch(messageActions.fetchMessage(companyId,departmentId))
     }
 
-    const CreateMsg = async(senderName,message) => {
-        let date = new Date();
-        await dispatch(messageActions.createMessage(comapanyid,DepId,senderName,message,date,senderId))
-    }
     const [message1,setMessage1] = useState('');
 
     return(
-        <View style={{backgroundColor:'#121212',flex:1}} >
-            <View>
-                <View style={{flex:1}}>
-                   <FlatList data={message} keyExtractor={item=>item.id} renderItem={itemData =>
-                   <Chat name={itemData.item.name} message={itemData.item.message}/>}/>
-                </View>
-                <View style={styles.TextingContainer}>
-                    <View>
-                        <TextInput style={styles.input} 
-                        placeholder="Message" mode="flat" onChangeText={text => setMessage1(text)}/>
-                    </View>
-                    <View>
-                    <TouchableOpacity onPress={CreateMsg.bind(senderName,message1)} >
-                      <View style={{backgroundColor:'#ea80fc', width:'100%', padding:9.5,  borderRadius:8}}>
-                        <Text style={{fontFamily:'book', fontSize:20, color:'white', alignSelf:'center'}}>Send</Text>
-                      </View>
-                    </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
+        
+        <View style={{backgroundColor:'#121212',height:Dimensions.get('window').height,}} >
+        <Button
+            title='Open'
+            onPress={CreateMsg}
+        />
+        <FlatList
+            data={message}
+            keyExtractor={x=>x.id}
+            renderItem={({item,index})=>{
+                return<Chat
+                    item = {item}
+                />
+            }}
+        />
+
         </View>
+        
     )
 }
 const styles = StyleSheet.create({

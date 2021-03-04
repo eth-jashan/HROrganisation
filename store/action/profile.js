@@ -139,8 +139,8 @@ export const fetchProfile=()=>{
                 ,resData[key].Name,resData[key].Number,resData[key].email,resData[key].Age,
                 resData[key].Role,resData[key].teamleader,resData[key].joinedDate, resData[key].EmpId))
         }
-        console.log(profile.filter(x=>x.empId === uid), uid)
-        dispatch({type:FETCH_PROFILE,profilelist:profile.filter(x=>x.empId === uid),userId:uid,Token:token})
+        profile = profile.filter(x=>x.empId === uid)
+        dispatch({type:FETCH_PROFILE,profilelist:profile,userId:uid,Token:token, depId:profile[0].DepId, compId:profile[0].compId, teamLeader:profile[0].teamleader})
     }
 }
 
