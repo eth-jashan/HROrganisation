@@ -12,6 +12,7 @@ import AppLoading from "expo-app-loading"
 import authReducer from './store/reducer/profile'
 import listReducer from './store/reducer/registrationlist'
 import profileReducere from './store/reducer/profile'
+import messageReducer from './store/reducer/message';
 
 
 
@@ -32,7 +33,8 @@ const fontLoading = () =>{
 const reducers=combineReducers({
   auth:authReducer,
   list:listReducer,
-  profile:profileReducere
+  profile:profileReducere,
+  message:messageReducer
 })
 
 const store=createStore(reducers,applyMiddleware(ReduxThunk))

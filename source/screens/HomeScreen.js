@@ -2,10 +2,18 @@ import React ,{useEffect,useCallback}from 'react'
 import {View,Text} from 'react-native'
 import { HeaderButtons,Item } from 'react-navigation-header-buttons';
 import Header from '../components/Header'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import * as messageActions from '../../store/action/message';
 
 const HomeScreen=props=>{
     const dispatch=useDispatch()
+
+    const profile = useSelector(state=>state.profile.detailList);
+
+    const companyid = profile.compid;
+    const DepId = profile.depid;
+
+    dispatch(messageActions.fetchMessage(companyid,DepId))
     const logging=useCallback(async()=>{
        
     },[dispatch])
